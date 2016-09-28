@@ -61,3 +61,151 @@ let beetsQuestion = SurveyQuestion(text: "How about beets?") //cannot change
 ##Default Initializers
 
 The default initializer simply creates a new instance with all of its properties set to their default values.
+
+###Memberwise Initializers for Structure Types
+```
+struct Size {
+    var width = 0.0, height = 0.0
+}
+let twoByTwo = Size(width: 2.0, height: 2.0)
+```
+
+##Initializer Delegation for Value Types
+Value types (structures and enumerations) do not support inheritance, and so their initializer delegation process is relatively simple, because they can only delegate to another initializer that they provide themselves.   
+Classes, however, can inherit from other classes.
+
+
+
+
+##Class Inheritance and Initialization
+designated initializers and convenience initializers.
+
+
+###Designated Initializers and Convenience Initializers
+Designated initializers are the primary initializers for a class. A designated initializer fully initializes all properties introduced by that class and calls an appropriate superclass initializer to continue the initialization process up the superclass chain.  
+
+Subclasses can modify inherited variable properties during initialization, but can not modify inherited constant properties.
+
+
+##Automatic Initializer Inheritance
+If your subclass provides an implementation of all of its superclass designated initializers, then it automatically inherits all of the superclass convenience initializers.
+
+
+
+###Designated and Convenience Initializers in Action
+Ex:
+```
+class Food {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+    convenience init() {
+        self.init(name: "[Unnamed]")
+    }
+}
+
+class RecipeIngredient: Food {
+    var quantity: Int
+    init(name: String, quantity: Int) {
+        self.quantity = quantity
+        super.init(name: name)
+    }
+    override convenience init(name: String) {   //here, Because overrides a designated initializer from its superclass, it must override 
+        self.init(name: name, quantity: 1)
+    }
+}
+```
+
+
+##Failable Initializers
+using init?  
+Ex
+```
+struct Animal {
+    let species: String
+    init?(species: String) {
+        if species.isEmpty { return nil }
+        self.species = species
+    }
+}
+```
+with string, or empty string
+```
+let someCreature = Animal(species: "Giraffe")
+ 
+if let giraffe = someCreature {
+    print(" \(giraffe.species)")
+}
+
+
+let anonymousCreature = Animal(species: "")
+// anonymousCreature is of type Animal?, not Animal
+ 
+if anonymousCreature == nil {
+}
+```
+###Failable Initializers for Enumerations
+Enum type, return type = self .  
+Ex
+```
+enum TemperatureUnit {
+    case celsius, fahrenheit
+    init?(symbol: Character) {
+        switch symbol {
+        
+        case "C":
+            self = .celsius             //self = ....
+        case "F":
+            self = .fahrenheit
+        default:
+            return nil
+        }
+    }
+}
+let unknownUnit = TemperatureUnit(symbol: "X")
+if unknownUnit == nil {
+    print("")
+}
+```
+
+###Failable Initializers for Enumerations with Raw Values
+Enumerations with raw values automatically receive a failable initializer, init?(rawValue:),  
+that takes a parameter called rawValue of the appropriate raw-value type.  
+```
+enum TemperatureUnit: Character {
+    case celsius = "C", fahrenheit = "F"
+}
+ 
+let fahrenheitUnit = TemperatureUnit(rawValue: "F")
+if fahrenheitUnit != nil {
+    print("")
+}
+```
+
+
+###Propagation of Initialization Failure
+ a subclass failable initializer can delegate up to a superclass failable initializer.
+ 
+ 
+ 
+ ##Required Initializers
+Write the required modifier before the definition of a class initializer to indicate that every subclass of the class must implement that initializer:
+ 
+
+##Setting a Default Property Value with a Closure or Function
+value vs closure:
+```
+var numberOfWheels = 0
+    var description: String {
+        return "\(numberOfWheels) wheel(s)"
+    }
+ ```
+ closure
+ ```
+ let someProperty: SomeType = {  //note '=' sign here
+ 
+        // someValue must be of the same type as SomeType
+        return someValue
+    }()
+ ```
