@@ -63,7 +63,28 @@ If you don’t write the parameter name and parentheses within your implementati
 Similarly, if you implement a didSet observer, it’s passed a constant parameter containing the old property value. 
 You can name the parameter or use the default parameter name of ```oldValue```.
 
-(tbc)
+##Global and Local Variables
+
+
+##Type Properties (static)
+
+Stored type properties can be variables or constants.  
+
+You define type properties with the static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. 
+```
+class SomeClass {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 27
+    }
+    class var overrideableComputedTypeProperty: Int {
+        return 107
+    }
+}
+```
+
+
+
 
 
 
