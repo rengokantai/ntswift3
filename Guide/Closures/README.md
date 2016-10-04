@@ -54,3 +54,6 @@ let alsoIncrementByTen = incrementByTen
 alsoIncrementByTen()//30
 ```
 ##Escaping Closures
+
+
+##Autoclosures
